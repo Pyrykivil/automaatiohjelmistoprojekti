@@ -716,7 +716,9 @@ public class DigitalTwin {
             // physical assembly
     	
 // GREEN CODE STARTS HERE
-
+if(waitingForLego && lego != null && (lego.state == LegoState.AtAssembly)) {
+	waitingForLego = false;
+}
 // GREEN CODE ENDS HERE
             
             if(!physicalAssembly && virtualAssemblyComplete) {
@@ -738,6 +740,8 @@ public class DigitalTwin {
                 }
 
 // BLUE CODE STARTS HERE
+
+gotoLego = assemblyArm.move();
 
 // BLUE CODE ENDS HERE        
 
@@ -783,7 +787,7 @@ public class DigitalTwin {
             }
 
 
-            
+            // PURPLE STARTS HERE
             if(trajectoryMotion) {
                 if(assemblyInProgress) {
                 	assemblyInProgress = assemblyArm.move();
@@ -792,6 +796,7 @@ public class DigitalTwin {
                     }
                     return;
                 }
+                // PURPLE ENDS HERE
                 
                 if(rotationMotion) {
                     boolean bothJoints = true;
@@ -815,6 +820,7 @@ public class DigitalTwin {
                 if(!virtualAssemblyComplete) {
                     collisionDetection = true; // it will be set to true when the arm is at lego start position with lego on board
                 }
+                //Orange code starts here
                 if(trajectoryPoint == null) { // we are done with this lego
 /*                    if(lego.id.equalsIgnoreCase("rect11")) {
                                         Main.freeze = true;
@@ -823,12 +829,18 @@ public class DigitalTwin {
                     legoNum++;
 //                    approachAttempt = 1; // reset for next lego
                     lego.location = lego.node.getWorldTranslation();
-                    trajectoryMotion = false;
-                    lego.assembled = true;
+                    trajectoryMotion = false; //  ORANGE resetTrajectoryMotion()
+                    lego.assembled = true;   // ORANGE lego.assembled = true;
 
                    
-                    lego.disconnectArm();
-                    node.attachChild(lego.node);
+                    lego.disconnectArm();   // ORANGE disconnectArm()
+                    node.attachChild(lego.node); // ORANGE attachToNode(part.node)
+                    
+                // Orange 1 ends here
+                    
+               
+                // orange continue
+                    
                     if(connectingUpward) {
                         assemblyArm.rotateBack();
                         connectingUpward = false;
@@ -840,8 +852,8 @@ public class DigitalTwin {
                     }
 
                 } else {
-                    if(trajectory.rotationMotion()) {
-                        assemblyArm.initRotate(this);
+                    if(trajectory.rotationMotion()) {    //Orange isRotationMotion() 
+                        assemblyArm.initRotate(this);    // ORANGE setRotationInProgress / initRotate 
                         rotationMotion = true;
                         return;
                     }
@@ -855,12 +867,15 @@ public class DigitalTwin {
                     return;
                 }
             }
-            
+            // orange ends here
+       
            // if we get down here it means that the previous lego was assembled and now we need to find the next lego
            collisionDetection = false;
            if (bottomReady) {
 // RED CODE STARTS HERE
 
+				 lego = nextUnassembledLego();        	   
+        	   
 // RED CODE ENDS HERE
                 if(lego == null) {
                     if (physicalAssembly) {
