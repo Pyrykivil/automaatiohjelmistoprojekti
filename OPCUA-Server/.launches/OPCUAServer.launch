@@ -15,5 +15,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="OPCUA-Server"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="OPCUA-Server"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--illegal-access=permit"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--illegal-access=permit&#13;&#10;--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED"/>
 </launchConfiguration>

@@ -168,21 +168,37 @@ public class OPCUAClient {
 	}
 
 	protected void read(NodeId nodeId) {
-		/**
-		 * TODO Write your code here
-		 */
+	    try {
+	        DataValue value = client.readValue(nodeId);
+	        System.out.println(value.getValue());
+	    } catch (ServiceException | StatusException e) {
+	        System.out.println(e);
+	    }
 	}
 
 	protected void write(NodeId nodeId, String value) {
-		/**
-		 * TODO Write your code here
-		 */
+	    try {
+	        client.writeValue(nodeId, value);
+	    } catch (ServiceException | StatusException e) {
+	        System.out.println(e);
+	    }
 	}
 
-	protected NodeId findNodeId() {
-		/**
-		 * TODO Write your code here
-		 */
-		return null;
+	protected NodeId findNodeId() throws StatusException {
+	    try {
+	        UaNode objectsFolder = client.getAddressSpace().getNode(Identifiers.ObjectsFolder);
+	        UaReference[] references = objectsFolder.getForwardReferences(Identifiers.Organizes);
+
+	        for (int i = 0; i < references.length; i++) {
+	            UaNode targetNode = references[i].getTargetNode();
+	            if (((UaInstance) targetNode).getTypeDefinition().getNodeId().equals(Identifiers.BaseObjectType)) {
+	                UaReference[] componentRefs = targetNode.getForwardReferences(Identifiers.HasComponent);
+	                return componentRefs[0].getTargetNode().getNodeId();
+	            }
+	        }
+	    } catch (ServiceException | AddressSpaceException e) {
+	        System.out.println(e);
+	    }
+	    return null;
 	}
 }
